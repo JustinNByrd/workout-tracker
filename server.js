@@ -16,6 +16,16 @@ app.use(express.static("public"));
 // set userNewUrlParser to true to not use depricated URL string parser
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
 
+app.get("/api/workouts", async (req, res) => {
+	try {
+		const lastWorkout = await db.Workout.find().sort({day: -1}).limit(1);
+		res.json(lastWorkout);
+	}
+	catch (err) {
+		res.json(err);
+	}
+});
+
 app.listen(PORT, () => {
 	console.log(`App running on port ${PORT}!`);
 });
