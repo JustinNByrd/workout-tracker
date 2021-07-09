@@ -60,6 +60,16 @@ app.put("/api/workouts/:id", async (req, res) => {
 	}
 });
 
+app.get("/api/workouts/range", async (req, res) => {
+	try {
+		const workoutData = await db.Workout.find( {"day": {$gte: new Date((new Date().getDate() - (7 * 24 * 60 * 60 * 1000)))}});
+		res.status(200).json(workoutData);
+	} catch (err) {
+		console.log(err);
+		res.status(500).json(err);
+	}
+});
+
 app.listen(PORT, () => {
 	console.log(`App running on port ${PORT}!`);
 });
