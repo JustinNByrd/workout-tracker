@@ -60,9 +60,14 @@ app.put("/api/workouts/:id", async (req, res) => {
 	}
 });
 
+// return workout data from last 7 days
 app.get("/api/workouts/range", async (req, res) => {
 	try {
-		const workoutData = await db.Workout.find( {"day": {$gte: new Date((new Date().getDate() - (7 * 24 * 60 * 60 * 1000)))}});
+		let fromDate = new Date();
+		fromDate.setHours(0,0,0,0);
+		fromDate -= 7 * 24 * 60 * 60 * 1000;
+		fromDate = new Date(fromDate);
+		const workoutData = await db.Workout.find( {"day": {$gte: fromDate}});
 		res.status(200).json(workoutData);
 	} catch (err) {
 		console.log(err);
